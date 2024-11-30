@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fruits and Vegetables</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0; /* Removed top margin to move tables to top */
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    /* New header styling for section headers */
+    .section-header {
+      background-color: #FFC107;
+      color: #000;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    /* Even rows - light red */
+    tr:nth-child(even) td {
+      background-color: #FFCDD2;
+    }
+    /* Odd rows - light blue */
+    tr:nth-child(odd) td {
+      background-color: #BBDEFB;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Fruits and Vegetables in Hindi and English</h1>
+  <div class="container" id="content">
+   
+    <table>
+      <thead>
+        <tr class="section-header">
+          <th colspan="2">Fruits (Phal)</th>
+        </tr>
+        <tr>
+          <th>Hindi Name</th>
+          <th>English Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Aam</td><td>Mango</td></tr>
+        <tr><td>Seb</td><td>Apple</td></tr>
+        <tr><td>Kela</td><td>Banana</td></tr>
+        <tr><td>Santara</td><td>Orange</td></tr>
+        <tr><td>Anar</td><td>Pomegranate</td></tr>
+        <tr><td>Angoor</td><td>Grapes</td></tr>
+        <tr><td>Nariyal</td><td>Coconut</td></tr>
+        <tr><td>Papita</td><td>Papaya</td></tr>
+        <tr><td>Tarbooj</td><td>Watermelon</td></tr>
+        <tr><td>Leechi</td><td>Lychee</td></tr>
+        <tr><td>Peru</td><td>Guava</td></tr>
+      </tbody>
+    </table>
+<Br><Br>
+    <table>
+      <thead>
+        <tr class="section-header">
+          <th colspan="2">Vegetables (Sabziyaan)</th>
+        </tr>
+        <tr>
+          <th>Hindi Name</th>
+          <th>English Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Aloo</td><td>Potato</td></tr>
+        <tr><td>Pyaz</td><td>Onion</td></tr>
+        <tr><td>Tamatar</td><td>Tomato</td></tr>
+        <tr><td>Bhindi</td><td>Ladyfinger (Okra)</td></tr>
+        <tr><td>Baingan</td><td>Brinjal (Eggplant)</td></tr>
+        <tr><td>Gajar</td><td>Carrot</td></tr>
+        <tr><td>Gobhi</td><td>Cauliflower</td></tr>
+        <tr><td>Matar</td><td>Peas</td></tr>
+        <tr><td>Lauki</td><td>Bottle Gourd</td></tr>
+        <tr><td>Shimla Mirch</td><td>Capsicum</td></tr>
+        <tr><td>Sem</td><td>Flat Beans</td></tr>
+        <tr><td>Nenua</td><td>Sponge Gourd</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button onclick="downloadPDF()">Download as PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const content = document.getElementById('content');
+
+      const canvas = await html2canvas(content, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+
+      while (position + pageHeight < imgHeight) {
+        position += pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, -position, pdfWidth, imgHeight);
+      }
+
+      pdf.save('fruits_and_vegetables.pdf');
+    }
+  </script>
+
+</body>
+</html>
